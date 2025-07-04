@@ -1,50 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="main.css">
-    <title>Bem-vindo ao site</title>
-    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="main.css">
 </head>
-
 <body>
-    <main class="container">
-        <form>
-            <h1>Login</h1>
+  <main class="container">
+    <form id="formLogin">
+      <h1>Login</h1>
 
-            <div class="input-box">
+      <div class="input-box">
+        <input placeholder="Email" type="email" name="email" required>
+      </div>
 
-                <input placeholder="Usuario" type="email">
-                <i class="bx bxs-user"></i>
-            </div>
-            <div class="input-box">
-                <input placeholder="password" type="password">
-                <i class="bx bxs-lock-alt"></i>
-            </div>
+      <div class="input-box">
+        <input placeholder="Senha" type="password" name="senha" required>
+      </div>
 
-            <div>
-                <label class="remember-forgot">
+      <div>
+        <label class="remember-forgot">
+          <input type="checkbox"> lembrar do acesso?
+          <a href="#"> Esqueci a senha</a>
+        </label>
+      </div>
 
-                    <input type="checkbox">
-                        lembrar do acesso?
-                        <a href="#"> Esqueci a senha</a>
-                </label>
-            </div>
+      <div class="Login-cl">
+        <button class="Login" type="submit">Login</button>
+      </div>
 
-            <div class="Login-cl">
-                <label>
-                    <button class="Login" type="submit">Login</button>
-                </label>
+      <div class="register-link">
+        <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+      </div>
+    </form>
+  </main>
 
-                <div class="register-link">
-                    <p> Não tem uma conta? <a href="cadastro.html">Cadastre-se</a> </p>
+  <script>
+    // mesma função de hash usada no cadastro
+    async function hashSenha(senha) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(senha);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 
-                </div>
-        </form>
-    </main>
+    const form = document.getElementById('formLogin');
 
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = form.email.value.trim();
+      const senha = form.senha.value;
+
+      const senhaCriptografada = await hashSenha(senha);
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+      const usuario = usuarios.find(u => u.email === email);
+
+      if (!usuario) {
+        alert("❌ Usuário não encontrado.");
+        return;
+      }
+
+      if (usuario.senha === senhaCriptografada) {
+        alert("✅ Login realizado com sucesso!");
+        // redirecionar para uma página interna, se quiser:
+        // window.location.href = "painel.html";
+      } else {
+        alert("❌ Senha incorreta.");
+      }
+    });
+  </script>
 </body>
-
 </html>
