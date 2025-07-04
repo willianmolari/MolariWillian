@@ -68,6 +68,8 @@
         alert("✅ Login realizado com sucesso!");
         // redirecionar para uma página interna, se quiser:
         // window.location.href = "painel.html";
+        sessionStorage.setItem("usuarioLogado", email);
+window.location.href = "dashboard.html";
       } else {
         alert("❌ Senha incorreta.");
       }
