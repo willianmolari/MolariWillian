@@ -13,27 +13,5 @@
     <button id="logoutBtn">Sair</button>
   </main>
 
-  <script>
-    // Verifica se o usuário está logado
-    const emailLogado = sessionStorage.getItem("usuarioLogado");
-
-    if (!emailLogado) {
-      // Se não estiver logado, redireciona para a tela de login
-      alert("Você precisa estar logado para acessar o dashboard.");
-      window.location.href = "index.html"; // troque para seu arquivo de login
-    } else {
-      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-      const usuario = usuarios.find(u => u.email === emailLogado);
-      const nome = usuario?.nome || emailLogado;
-
-      document.getElementById('titulo').textContent = `👋 Olá, ${nome}!`;
-    }
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      sessionStorage.removeItem("usuarioLogado");
-      window.location.href = "index.html"; // tela de login
-    });
-  </script>
 </body>
 </html>
