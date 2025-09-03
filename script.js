@@ -1,9 +1,9 @@
-📄 script.js – JavaScript para cálculo e envio ao Google Sheets:
 function formatReal(valor) {
     return "R$ " + valor.toFixed(2).replace(".", ",");
 }
 
 function atualizarValores() {
+    const produto = document.getElementById("produto").value;
     const material = document.getElementById("material").value;
     const quantidade = parseFloat(document.getElementById("quantidade").value) || 0;
     const horas = parseFloat(document.getElementById("horas").value) || 0;
@@ -21,7 +21,7 @@ function atualizarValores() {
     if (maquina === "Ender 3 S1") custoLuz = consumoKw * precoKwh * horas;
 
     const taxaMaquina = 2 * horas;
-    const taxaPintura = (pintura === "Sim") ? 4 : 0;
+    const taxaPintura = pintura === "Sim" ? 4 : 0;
     const custoReal = custoFilamento + custoLuz + taxaMaquina + taxaPintura;
 
     const valorMin = custoReal / (1 - 0.35);
@@ -42,6 +42,7 @@ function atualizarValores() {
 }
 
 function salvarDados() {
+    const produto = document.getElementById("produto").value;
     const material = document.getElementById("material").value;
     const quantidade = parseFloat(document.getElementById("quantidade").value) || 0;
     const horas = parseFloat(document.getElementById("horas").value) || 0;
@@ -59,7 +60,7 @@ function salvarDados() {
     if (maquina === "Ender 3 S1") custoLuz = consumoKw * precoKwh * horas;
 
     const taxaMaquina = 2 * horas;
-    const taxaPintura = (pintura === "Sim") ? 4 : 0;
+    const taxaPintura = pintura === "Sim" ? 4 : 0;
     const custoReal = custoFilamento + custoLuz + taxaMaquina + taxaPintura;
 
     const valorMin = custoReal / (1 - 0.35);
@@ -67,6 +68,7 @@ function salvarDados() {
     const valorMax = custoReal / (1 - 0.8);
 
     const dados = {
+        produto,
         material,
         quantidade,
         horas,
@@ -82,26 +84,4 @@ function salvarDados() {
         valorMax
     };
 
-    fetch("SUA_URL_DO_SCRIPT_AQUI", {
-        method: "POST",
-        body: JSON.stringify(dados),
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-    .then(response => response.text())
-    .then(resp => {
-        alert("Dados salvos com sucesso!");
-    })
-    .catch(error => {
-        alert("Erro ao salvar os dados: " + error);
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("material").addEventListener("change", atualizarValores);
-    document.getElementById("quantidade").addEventListener("input", atualizarValores);
-    document.getElementById("horas").addEventListener("input", atualizarValores);
-    document.getElementById("maquina").addEventListener("change", atualizarValores);
-    document.getElementById("pintura").addEventListener("change", atualizarValores);
-});
+    fetch("S
