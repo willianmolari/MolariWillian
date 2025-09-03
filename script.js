@@ -87,12 +87,12 @@ document.querySelectorAll("button.menu-btn").forEach(botao => {
   });
 });
 
-// Atualizar valores ao digitar/selecionar
-document.querySelectorAll("input, select").forEach(elemento => {
+// Atualizar valores de orçamento ao digitar/selecionar
+document.querySelectorAll("#telaGestao input, #telaGestao select").forEach(elemento => {
   elemento.addEventListener("input", atualizarExibicaoValores);
 });
 
-// Lidar com o envio do formulário
+// Lidar com o envio de orçamento
 document.getElementById("btnEnviar").addEventListener("click", async () => {
   const produto = document.getElementById("produto").value.trim();
   const material = document.getElementById("material").value;
@@ -102,7 +102,7 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
   const pintura = document.getElementById("pintura").value;
 
   if (!produto || !material || isNaN(quantidade) || quantidade <= 0 || isNaN(horas) || horas <= 0 || !maquina || !pintura) {
-    alert("Por favor, preencha todos os campos corretamente.");
+    alert("Por favor, preencha todos os campos de Orçamento corretamente.");
     return;
   }
 
@@ -118,19 +118,15 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
     ...valoresCalculados
   };
   
-  // Alerta de envio para feedback imediato
   alert("Enviando dados para o servidor...");
 
   try {
-    // Requisicao com `mode: 'no-cors'` para funcionar do GitHub Pages
-    const response = await fetch(URL_APPS_SCRIPT, {
+    await fetch(URL_APPS_SCRIPT, {
       method: "POST",
       body: JSON.stringify(dados),
       mode: 'no-cors' 
     });
 
-    // A resposta do 'no-cors' não pode ser lida, então assumimos sucesso
-    // se a requisição não lançar um erro.
     alert("Orçamento enviado com sucesso!");
 
     // Limpar os campos após o envio
@@ -145,6 +141,79 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
   } catch (error) {
     console.error("Erro ao enviar orçamento:", error);
     alert("Erro ao enviar orçamento. Verifique sua conexão ou o console do navegador.");
+  }
+});
+
+// Lidar com o envio de gastos
+document.getElementById("btnSalvarGasto").addEventListener("click", async () => {
+  const descricaoGasto = document.getElementById("descricaoGasto").value.trim();
+  const valorGasto = parseFloat(document.getElementById("valorGasto").value);
+  const dataGasto = document.getElementById("dataGasto").value;
+
+  if (!descricaoGasto || isNaN(valorGasto) || valorGasto <= 0 || !dataGasto) {
+    alert("Por favor, preencha todos os campos de Gastos corretamente.");
+    return;
+  }
+
+  const dados = {
+    descricaoGasto,
+    valorGasto,
+    dataGasto,
+  };
+
+  alert("Salvando gasto...");
+  try {
+    await fetch(URL_APPS_SCRIPT, {
+      method: "POST",
+      body: JSON.stringify(dados),
+      mode: 'no-cors'
+    });
+    alert("Gasto salvo com sucesso!");
+    // Limpar campos
+    document.getElementById("descricaoGasto").value = "";
+    document.getElementById("valorGasto").value = "";
+    document.getElementById("dataGasto").value = "";
+  } catch (error) {
+    console.error("Erro ao salvar gasto:", error);
+    alert("Erro ao salvar gasto. Tente novamente.");
+  }
+});
+
+// Lidar com a atualização de estoque
+document.getElementById("btnAtualizarEstoque").addEventListener("click", async () => {
+  const materialEstoque = document.getElementById("materialEstoque").value;
+  const quantidadeEstoque = parseFloat(document.getElementById("quantidadeEstoque").value);
+  const tipoMovimento = document.getElementById("tipoMovimento").value;
+  const notaEstoque = document.getElementById("notaEstoque").value.trim();
+
+  if (!materialEstoque || isNaN(quantidadeEstoque) || quantidadeEstoque <= 0 || !tipoMovimento) {
+    alert("Por favor, preencha todos os campos de Estoque corretamente.");
+    return;
+  }
+
+  const dados = {
+    materialEstoque,
+    quantidadeEstoque,
+    tipoMovimento,
+    notaEstoque,
+  };
+
+  alert("Atualizando estoque...");
+  try {
+    await fetch(URL_APPS_SCRIPT, {
+      method: "POST",
+      body: JSON.stringify(dados),
+      mode: 'no-cors'
+    });
+    alert("Estoque atualizado com sucesso!");
+    // Limpar campos
+    document.getElementById("materialEstoque").value = "";
+    document.getElementById("quantidadeEstoque").value = "";
+    document.getElementById("tipoMovimento").value = "";
+    document.getElementById("notaEstoque").value = "";
+  } catch (error) {
+    console.error("Erro ao atualizar estoque:", error);
+    alert("Erro ao atualizar estoque. Tente novamente.");
   }
 });
 
