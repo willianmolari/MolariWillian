@@ -12,8 +12,6 @@ const PRECOS_FILAMENTO_KG = {
   "PETG": 120
 };
 
-let orcamentosData = []; // Armazenará os orçamentos da planilha
-
 /**
  * Formata um número para o padrão monetário brasileiro.
  * @param {number} valor
@@ -22,70 +20,6 @@ let orcamentosData = []; // Armazenará os orçamentos da planilha
 function formatReal(valor) {
   if (isNaN(valor)) return "R$ 0,00";
   return "R$ " + valor.toFixed(2).replace(".", ",");
-}
-
-/**
- * Busca os orçamentos salvos na planilha.
- */
-async function fetchOrcamentos() {
-  try {
-    const response = await fetch(`${URL_APPS_SCRIPT}?action=getOrcamentos`);
-    if (!response.ok) {
-      throw new Error("Erro ao buscar orçamentos: " + response.statusText);
-    }
-    const data = await response.json();
-    orcamentosData = data.map(row => {
-      return {
-        produto: row.produto,
-        material: row.material,
-        quantidade: parseFloat(row.quantidade),
-        horas: parseFloat(row.horas),
-        maquina: row.maquina,
-        pintura: row.pintura
-      };
-    });
-    populateDatalist();
-  } catch (error) {
-    console.error("Erro ao buscar orçamentos:", error);
-  }
-}
-
-/**
- * Preenche a datalist com os produtos dos orçamentos.
- */
-function populateDatalist() {
-  const datalist = document.getElementById("produtos");
-  datalist.innerHTML = ""; // Limpa a lista antes de preencher
-  const produtosUnicos = [...new Set(orcamentosData.map(item => item.produto))];
-  produtosUnicos.forEach(produto => {
-    const option = document.createElement("option");
-    option.value = produto;
-    datalist.appendChild(option);
-  });
-}
-
-/**
- * Preenche os campos do formulário com dados de um orçamento existente.
- * @param {string} produtoSelecionado
- */
-function preencherFormulario(produtoSelecionado) {
-  const produtoEncontrado = orcamentosData.find(item => item.produto === produtoSelecionado);
-  if (produtoEncontrado) {
-    document.getElementById("material").value = produtoEncontrado.material;
-    document.getElementById("quantidade").value = produtoEncontrado.quantidade;
-    document.getElementById("horas").value = produtoEncontrado.horas;
-    document.getElementById("maquina").value = produtoEncontrado.maquina;
-    document.getElementById("pintura").value = produtoEncontrado.pintura;
-    atualizarExibicaoValores();
-  } else {
-    // Se o produto não for encontrado, limpa os campos para um novo orçamento
-    document.getElementById("material").value = "";
-    document.getElementById("quantidade").value = "";
-    document.getElementById("horas").value = "";
-    document.getElementById("maquina").value = "";
-    document.getElementById("pintura").value = "";
-    atualizarExibicaoValores();
-  }
 }
 
 /**
@@ -151,11 +85,6 @@ document.querySelectorAll("button.menu-btn").forEach(botao => {
     const tela = botao.getAttribute("data-tela");
     document.getElementById(tela).classList.add("active");
   });
-});
-
-// Lidar com a seleção de um produto na datalist
-document.getElementById("produto").addEventListener("input", (event) => {
-  preencherFormulario(event.target.value);
 });
 
 // Lidar com o envio de orçamento (apenas cálculo e envio para 'Orçamentos')
@@ -337,6 +266,5 @@ document.getElementById("btnAtualizarEstoque").addEventListener("click", async (
 
 // Inicializa a página
 window.addEventListener("load", () => {
-  fetchOrcamentos();
   atualizarExibicaoValores();
 });
