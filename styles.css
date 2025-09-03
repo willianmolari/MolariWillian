@@ -75,6 +75,7 @@ label {
 
 input[type="number"],
 input[type="text"],
+input[type="date"],
 select {
   width: 100%;
   padding: 10px 12px;
@@ -92,8 +93,8 @@ select:focus {
   border-color: var(--primary-color);
 }
 
-/* Botão de envio */
-#btnEnviar {
+/* Botões de envio */
+#btnEnviar, #btnRegistrarVenda, #btnSalvarGasto, #btnAtualizarEstoque {
   margin-top: 25px;
   padding: 14px;
   width: 100%;
@@ -107,8 +108,16 @@ select:focus {
   transition: background-color 0.3s ease;
 }
 
-#btnEnviar:hover {
+#btnEnviar:hover, #btnRegistrarVenda:hover, #btnSalvarGasto:hover, #btnAtualizarEstoque:hover {
   background-color: var(--success-hover-color);
+}
+
+#btnRegistrarVenda {
+  background-color: #ff9800;
+}
+
+#btnRegistrarVenda:hover {
+  background-color: #e68a00;
 }
 
 /* Seção de resultados */
@@ -134,14 +143,6 @@ section {
 
 section.active {
   display: block;
-}
-
-/* Estilo para as telas placeholder */
-.placeholder {
-  text-align: center;
-  font-size: 20px;
-  padding: 50px 20px;
-  color: #666;
 }
 
 /* Media Queries para responsividade */
