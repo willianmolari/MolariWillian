@@ -1,5 +1,3 @@
-# Criar o arquivo HTML com o código fornecido
-html_code = """
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -52,6 +50,11 @@ html_code = """
 <body>
     <h1>Orçamento Impressão 3D</h1>
     <div class="container">
+
+        <!-- Campo de Produto (NOVO) -->
+        <label for="produto">Produto</label>
+        <input type="text" id="produto" placeholder="Digite o nome do produto">
+
         <label for="material">Material</label>
         <select id="material">
             <option value="">Selecione</option>
@@ -97,6 +100,7 @@ function formatReal(valor){
 }
 
 function atualizarValores(){
+    const produto = document.getElementById("produto").value;
     const material = document.getElementById("material").value;
     const quantidade = parseFloat(document.getElementById("quantidade").value) || 0;
     const horas = parseFloat(document.getElementById("horas").value) || 0;
@@ -113,13 +117,13 @@ function atualizarValores(){
     const consumoKw = 0.12;
     if(maquina === "Ender 3 S1") custoLuz = consumoKw * precoKwh * horas;
 
-    const taxaMaquina = 2*horas;
+    const taxaMaquina = 2 * horas;
     const taxaPintura = (pintura === "Sim") ? 4 : 0;
     const custoReal = custoFilamento + custoLuz + taxaMaquina + taxaPintura;
 
-    const valorMin = custoReal/(1-0.35);
-    const valorRec = custoReal/(1-0.5);
-    const valorMax = custoReal/(1-0.8);
+    const valorMin = custoReal/(1 - 0.35);
+    const valorRec = custoReal/(1 - 0.5);
+    const valorMax = custoReal/(1 - 0.8);
 
     const resultado = document.getElementById("resultado");
     resultado.innerHTML = `
@@ -134,19 +138,15 @@ function atualizarValores(){
     `;
 }
 
-document.getElementById("material").addEventListener("change", atualizarValores);
-document.getElementById("quantidade").addEventListener("input", atualizarValores);
-document.getElementById("horas").addEventListener("input", atualizarValores);
-document.getElementById("maquina").addEventListener("change", atualizarValores);
-document.getElementById("pintura").addEventListener("change", atualizarValores);
+// Adiciona os eventos para atualizar os valores dinamicamente
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("produto").addEventListener("input", atualizarValores);
+    document.getElementById("material").addEventListener("change", atualizarValores);
+    document.getElementById("quantidade").addEventListener("input", atualizarValores);
+    document.getElementById("horas").addEventListener("input", atualizarValores);
+    document.getElementById("maquina").addEventListener("change", atualizarValores);
+    document.getElementById("pintura").addEventListener("change", atualizarValores);
+});
 </script>
 </body>
 </html>
-"""
-
-# Salvar como arquivo HTML
-file_path = "/mnt/data/orcamento3d.html"
-with open(file_path, "w", encoding="utf-8") as f:
-    f.write(html_code)
-
-file_path
