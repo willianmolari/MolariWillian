@@ -92,7 +92,7 @@ document.querySelectorAll("#telaGestao input, #telaGestao select").forEach(eleme
   elemento.addEventListener("input", atualizarExibicaoValores);
 });
 
-// Lidar com o envio de orçamento (continua o mesmo)
+// Lidar com o envio de orçamento (apenas cálculo e envio para 'Orçamentos')
 document.getElementById("btnEnviar").addEventListener("click", async () => {
   const produto = document.getElementById("produto").value.trim();
   const material = document.getElementById("material").value;
@@ -142,7 +142,7 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
   }
 });
 
-// Lógica para registrar uma venda e atualizar o estoque
+// Lógica para registrar uma venda
 document.getElementById("btnRegistrarVenda").addEventListener("click", async () => {
   const produto = document.getElementById("produto").value.trim();
   const material = document.getElementById("material").value;
@@ -153,14 +153,14 @@ document.getElementById("btnRegistrarVenda").addEventListener("click", async () 
   const dataVenda = document.getElementById("dataVenda").value;
 
   if (!produto || !material || isNaN(quantidade) || quantidade <= 0 || isNaN(horas) || horas <= 0 || !maquina || !pintura || !dataVenda) {
-    alert("Por favor, preencha todos os campos corretamente para registrar a venda.");
+    alert("Por favor, preencha todos os campos e a data para registrar a venda.");
     return;
   }
 
   const valoresCalculados = calcularValores();
 
   const dadosVenda = {
-    isVenda: true, // Adiciona um marcador para o Apps Script identificar
+    isVenda: true, // Marcador para o Apps Script
     dataVenda,
     produto,
     material,
