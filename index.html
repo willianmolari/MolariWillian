@@ -20,39 +20,52 @@
 <!-- Tela de Gestão Geral (Orçamento e Venda) -->
 <section id="telaGestao" class="active">
   <div class="container">
+    <div class="input-group">
+      <label for="produto">Produto</label>
+      <input type="text" id="produto" placeholder="Nome do produto" />
+    </div>
 
-    <label for="produto">Produto</label>
-    <input type="text" id="produto" placeholder="Nome do produto" />
+    <div class="input-group">
+      <label for="material">Material</label>
+      <select id="material">
+        <option value="">Selecione</option>
+        <option value="ABS">ABS</option>
+        <option value="PLA">PLA</option>
+        <option value="PETG">PETG</option>
+      </select>
+    </div>
 
-    <label for="material">Material</label>
-    <select id="material">
-      <option value="">Selecione</option>
-      <option value="ABS">ABS</option>
-      <option value="PLA">PLA</option>
-      <option value="PETG">PETG</option>
-    </select>
+    <div class="input-group">
+      <label for="quantidade">Quantidade (g)</label>
+      <input type="number" id="quantidade" min="0" step="1" />
+    </div>
 
-    <label for="quantidade">Quantidade (g)</label>
-    <input type="number" id="quantidade" min="0" step="1" />
+    <div class="input-group">
+      <label for="horas">Horas de impressão</label>
+      <input type="number" id="horas" min="0" step="0.1" />
+    </div>
 
-    <label for="horas">Horas de impressão</label>
-    <input type="number" id="horas" min="0" step="0.1" />
+    <div class="input-group">
+      <label for="maquina">Máquina</label>
+      <select id="maquina">
+        <option value="">Selecione</option>
+        <option value="Ender 3 S1">Ender 3 S1</option>
+      </select>
+    </div>
 
-    <label for="maquina">Máquina</label>
-    <select id="maquina">
-      <option value="">Selecione</option>
-      <option value="Ender 3 S1">Ender 3 S1</option>
-    </select>
+    <div class="input-group">
+      <label for="pintura">Pintura</label>
+      <select id="pintura">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </div>
 
-    <label for="pintura">Pintura</label>
-    <select id="pintura">
-      <option value="">Selecione</option>
-      <option value="Sim">Sim</option>
-      <option value="Não">Não</option>
-    </select>
-
-    <label for="dataVenda">Data</label>
-    <input type="date" id="dataVenda" />
+    <div class="input-group">
+      <label for="dataVenda">Data</label>
+      <input type="date" id="dataVenda" />
+    </div>
 
     <button id="btnCalcular">Calcular Orçamento</button>
     <button id="btnRegistrarVenda">Registrar Venda</button>
@@ -74,16 +87,51 @@
 <section id="telaGastos">
   <div class="container">
     <h2>Registro de Gastos</h2>
-    <label for="descricaoGasto">Descrição</label>
-    <input type="text" id="descricaoGasto" placeholder="Ex: Filamento PLA Azul" />
 
-    <label for="valorGasto">Valor (R$)</label>
-    <input type="number" id="valorGasto" min="0" step="0.01" />
+    <div class="input-group">
+      <label for="tipoGasto">Tipo de Gasto</label>
+      <select id="tipoGasto">
+        <option value="luz">Luz</option>
+        <option value="filamento">Filamento</option>
+        <option value="taxa">Taxas</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
 
-    <label for="dataGasto">Data</label>
-    <input type="date" id="dataGasto" />
+    <div id="camposGastos">
+      <!-- Campos específicos de acordo com o tipo de gasto -->
+      <div id="campo-luz">
+        <label for="gastoLuz">Valor da Conta de Luz (R$)</label>
+        <input type="number" id="gastoLuz" min="0" step="0.01" />
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="dataGasto">Data</label>
+      <input type="date" id="dataGasto" />
+    </div>
 
     <button id="btnSalvarGasto">Salvar Gasto</button>
+  </div>
+
+  <div class="container tabela-gastos-container">
+    <h2>Consulta de Gastos</h2>
+    <div id="gastos-loading" class="loading-message">Carregando gastos...</div>
+    <div id="tabelaGastos">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Valor (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Os gastos serão inseridos aqui pelo JavaScript -->
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -91,26 +139,34 @@
 <section id="telaEstoque">
   <div class="container">
     <h2>Atualização de Estoque</h2>
-    <label for="materialEstoque">Material</label>
-    <select id="materialEstoque">
-      <option value="">Selecione</option>
-      <option value="ABS">ABS</option>
-      <option value="PLA">PLA</option>
-      <option value="PETG">PETG</option>
-    </select>
+    <div class="input-group">
+      <label for="materialEstoque">Material</label>
+      <select id="materialEstoque">
+        <option value="">Selecione</option>
+        <option value="ABS">ABS</option>
+        <option value="PLA">PLA</option>
+        <option value="PETG">PETG</option>
+      </select>
+    </div>
 
-    <label for="quantidadeEstoque">Quantidade (g)</label>
-    <input type="number" id="quantidadeEstoque" min="0" step="1" />
+    <div class="input-group">
+      <label for="quantidadeEstoque">Quantidade (g)</label>
+      <input type="number" id="quantidadeEstoque" min="0" step="1" />
+    </div>
 
-    <label for="tipoMovimento">Tipo de Movimento</label>
-    <select id="tipoMovimento">
-      <option value="">Selecione</option>
-      <option value="entrada">Entrada</option>
-      <option value="saida">Saída</option>
-    </select>
+    <div class="input-group">
+      <label for="tipoMovimento">Tipo de Movimento</label>
+      <select id="tipoMovimento">
+        <option value="">Selecione</option>
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+    </div>
 
-    <label for="notaEstoque">Nota</label>
-    <input type="text" id="notaEstoque" placeholder="Ex: Recebimento de novo lote" />
+    <div class="input-group">
+      <label for="notaEstoque">Nota</label>
+      <input type="text" id="notaEstoque" placeholder="Ex: Recebimento de novo lote" />
+    </div>
 
     <button id="btnAtualizarEstoque">Atualizar Estoque</button>
   </div>
