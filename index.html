@@ -4,8 +4,171 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Orçamento Impressão 3D - Gestão</title>
-<!-- Link para o arquivo de estilo -->
-<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Variáveis CSS para facilitar a personalização */
+  :root {
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --success-color: #28a745;
+    --success-hover-color: #1e7e34;
+    --bg-color: #f5f5f5;
+    --container-bg-color: #fff;
+    --text-color: #333;
+    --heading-color: #444;
+    --input-border-color: #ccc;
+    --result-bg-color: #e6f2ff;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Estilo geral */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 20px;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+
+  /* Cabeçalho e botões de navegação */
+  header {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+
+  .menu-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .menu-btn:hover,
+  .menu-btn.active {
+    background-color: var(--primary-hover-color);
+  }
+
+  /* Título principal */
+  h1 {
+    text-align: center;
+    color: var(--heading-color);
+    margin-bottom: 20px;
+  }
+
+  /* Container principal */
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--container-bg-color);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+  }
+
+  /* Estilo dos campos de formulário */
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--text-color);
+  }
+
+  input[type="number"],
+  input[type="text"],
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--input-border-color);
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+  /* Botão de envio */
+  #btnEnviar {
+    margin-top: 25px;
+    padding: 14px;
+    width: 100%;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #btnEnviar:hover {
+    background-color: var(--success-hover-color);
+  }
+
+  /* Seção de resultados */
+  .result {
+    background-color: var(--result-bg-color);
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: var(--border-radius);
+  }
+
+  .result p {
+    margin: 8px 0;
+  }
+  
+  .result p strong {
+    color: var(--heading-color);
+  }
+
+  /* Gerenciamento de telas */
+  section {
+    display: none;
+  }
+
+  section.active {
+    display: block;
+  }
+
+  /* Estilo para as telas placeholder */
+  .placeholder {
+    text-align: center;
+    font-size: 20px;
+    padding: 50px 20px;
+    color: #666;
+  }
+
+  /* Media Queries para responsividade */
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+    .container {
+      padding: 20px;
+    }
+    header {
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .menu-btn {
+      width: 100%;
+    }
+  }
+</style>
 </head>
 <body>
 
@@ -17,58 +180,40 @@
 
 <h1>Orçamento Impressão 3D</h1>
 
-<!-- Tela de Gestão Geral (Orçamento e Venda) -->
 <section id="telaGestao" class="active">
   <div class="container">
-    <div class="input-group">
-      <label for="produto">Produto</label>
-      <input type="text" id="produto" placeholder="Nome do produto" />
-    </div>
 
-    <div class="input-group">
-      <label for="material">Material</label>
-      <select id="material">
-        <option value="">Selecione</option>
-        <option value="ABS">ABS</option>
-        <option value="PLA">PLA</option>
-        <option value="PETG">PETG</option>
-      </select>
-    </div>
+    <label for="produto">Produto</label>
+    <input type="text" id="produto" placeholder="Digite o nome do produto" />
 
-    <div class="input-group">
-      <label for="quantidade">Quantidade (g)</label>
-      <input type="number" id="quantidade" min="0" step="1" />
-    </div>
+    <label for="material">Material</label>
+    <select id="material">
+      <option value="">Selecione</option>
+      <option value="ABS">ABS</option>
+      <option value="PLA">PLA</option>
+      <option value="PETG">PETG</option>
+    </select>
 
-    <div class="input-group">
-      <label for="horas">Horas de impressão</label>
-      <input type="number" id="horas" min="0" step="0.1" />
-    </div>
+    <label for="quantidade">Quantidade (g)</label>
+    <input type="number" id="quantidade" min="0" step="1" />
 
-    <div class="input-group">
-      <label for="maquina">Máquina</label>
-      <select id="maquina">
-        <option value="">Selecione</option>
-        <option value="Ender 3 S1">Ender 3 S1</option>
-      </select>
-    </div>
+    <label for="horas">Horas de impressão</label>
+    <input type="number" id="horas" min="0" step="0.1" />
 
-    <div class="input-group">
-      <label for="pintura">Pintura</label>
-      <select id="pintura">
-        <option value="">Selecione</option>
-        <option value="Sim">Sim</option>
-        <option value="Não">Não</option>
-      </select>
-    </div>
+    <label for="maquina">Máquina</label>
+    <select id="maquina">
+      <option value="">Selecione</option>
+      <option value="Ender 3 S1">Ender 3 S1</option>
+    </select>
 
-    <div class="input-group">
-      <label for="dataVenda">Data</label>
-      <input type="date" id="dataVenda" />
-    </div>
+    <label for="pintura">Pintura</label>
+    <select id="pintura">
+      <option value="">Selecione</option>
+      <option value="Sim">Sim</option>
+      <option value="Não">Não</option>
+    </select>
 
-    <button id="btnCalcular">Calcular Orçamento</button>
-    <button id="btnRegistrarVenda">Registrar Venda</button>
+    <button id="btnEnviar">Enviar Orçamento</button>
 
     <div class="result" id="resultado">
       <p><strong>Custo Filamento:</strong> R$ 0,00</p>
@@ -83,96 +228,172 @@
   </div>
 </section>
 
-<!-- Tela de Gastos -->
 <section id="telaGastos">
-  <div class="container">
-    <h2>Registro de Gastos</h2>
-
-    <div class="input-group">
-      <label for="tipoGasto">Tipo de Gasto</label>
-      <select id="tipoGasto">
-        <option value="luz">Luz</option>
-        <option value="filamento">Filamento</option>
-        <option value="taxa">Taxas</option>
-        <option value="outro">Outro</option>
-      </select>
-    </div>
-
-    <div id="camposGastos">
-      <!-- Campos específicos de acordo com o tipo de gasto -->
-      <div id="campo-luz">
-        <label for="gastoLuz">Valor da Conta de Luz (R$)</label>
-        <input type="number" id="gastoLuz" min="0" step="0.01" />
-      </div>
-    </div>
-
-    <div class="input-group">
-      <label for="dataGasto">Data</label>
-      <input type="date" id="dataGasto" />
-    </div>
-
-    <button id="btnSalvarGasto">Salvar Gasto</button>
-  </div>
-
-  <div class="container tabela-gastos-container">
-    <h2>Consulta de Gastos</h2>
-    <div id="gastos-loading" class="loading-message">Carregando gastos...</div>
-    <div id="tabelaGastos">
-      <table>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Tipo</th>
-            <th>Valor (R$)</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Os gastos serão inseridos aqui pelo JavaScript -->
-        </tbody>
-      </table>
-    </div>
+  <div class="container placeholder">
+    <p>Esta é a tela de Gastos.<br>Conteúdo a ser implementado.</p>
   </div>
 </section>
 
-<!-- Tela de Estoque -->
 <section id="telaEstoque">
-  <div class="container">
-    <h2>Atualização de Estoque</h2>
-    <div class="input-group">
-      <label for="materialEstoque">Material</label>
-      <select id="materialEstoque">
-        <option value="">Selecione</option>
-        <option value="ABS">ABS</option>
-        <option value="PLA">PLA</option>
-        <option value="PETG">PETG</option>
-      </select>
-    </div>
-
-    <div class="input-group">
-      <label for="quantidadeEstoque">Quantidade (g)</label>
-      <input type="number" id="quantidadeEstoque" min="0" step="1" />
-    </div>
-
-    <div class="input-group">
-      <label for="tipoMovimento">Tipo de Movimento</label>
-      <select id="tipoMovimento">
-        <option value="">Selecione</option>
-        <option value="entrada">Entrada</option>
-        <option value="saida">Saída</option>
-      </select>
-    </div>
-
-    <div class="input-group">
-      <label for="notaEstoque">Nota</label>
-      <input type="text" id="notaEstoque" placeholder="Ex: Recebimento de novo lote" />
-    </div>
-
-    <button id="btnAtualizarEstoque">Atualizar Estoque</button>
+  <div class="container placeholder">
+    <p>Esta é a tela de Estoque.<br>Conteúdo a ser implementado.</p>
   </div>
 </section>
 
-<!-- Link para o arquivo de script -->
-<script src="script.js"></script>
+<script>
+  // Variáveis para facilitar a manutenção
+  const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxbkJd-cMeVIq3NAkbSHIFL5vB01Y-oC5cZuu0wosYTdE-Ja9DgOuzW8SwxSFdSSiyfXA/exec";
+  const PRECO_KWH = 0.82607;
+  const CONSUMO_KW = 0.12;
+  const TAXA_MAQUINA_HORA = 2;
+  const TAXA_PINTURA = 4;
+
+  // Mapeamento de preços por material
+  const PRECOS_FILAMENTO_KG = {
+    "ABS": 100,
+    "PLA": 140,
+    "PETG": 120
+  };
+
+  /**
+   * Formata um número para o padrão monetário brasileiro.
+   * @param {number} valor
+   * @returns {string} Valor formatado
+   */
+  function formatReal(valor) {
+    if (isNaN(valor)) return "R$ 0,00";
+    return "R$ " + valor.toFixed(2).replace(".", ",");
+  }
+
+  /**
+   * Calcula todos os custos e valores de venda.
+   * @returns {object} Objeto com todos os valores calculados
+   */
+  function calcularValores() {
+    const material = document.getElementById("material").value;
+    const quantidade = parseFloat(document.getElementById("quantidade").value) || 0;
+    const horas = parseFloat(document.getElementById("horas").value) || 0;
+    const maquina = document.getElementById("maquina").value;
+    const pintura = document.getElementById("pintura").value;
+
+    const custoFilamento = (quantidade / 1000) * (PRECOS_FILAMENTO_KG[material] || 0);
+    const custoLuz = (maquina === "Ender 3 S1") ? CONSUMO_KW * PRECO_KWH * horas : 0;
+    const taxaMaquina = TAXA_MAQUINA_HORA * horas;
+    const taxaPintura = (pintura === "Sim") ? TAXA_PINTURA : 0;
+    const custoReal = custoFilamento + custoLuz + taxaMaquina + taxaPintura;
+
+    const valorMin = custoReal / (1 - 0.35);
+    const valorRec = custoReal / (1 - 0.5);
+    const valorMax = custoReal / (1 - 0.8);
+
+    return {
+      custoFilamento,
+      custoLuz,
+      taxaMaquina,
+      taxaPintura,
+      custoReal,
+      valorMin,
+      valorRec,
+      valorMax
+    };
+  }
+
+  /**
+   * Atualiza os valores exibidos na tela.
+   */
+  function atualizarExibicaoValores() {
+    const valores = calcularValores();
+    const resultado = document.getElementById("resultado");
+    resultado.innerHTML = `
+      <p><strong>Custo Filamento:</strong> ${formatReal(valores.custoFilamento)}</p>
+      <p><strong>Custo Luz:</strong> ${formatReal(valores.custoLuz)}</p>
+      <p><strong>Taxa Máquina:</strong> ${formatReal(valores.taxaMaquina)}</p>
+      <p><strong>Taxa Pintura:</strong> ${formatReal(valores.taxaPintura)}</p>
+      <p><strong>Custo Real:</strong> ${formatReal(valores.custoReal)}</p>
+      <p><strong>Valor Mínimo (35% lucro):</strong> ${formatReal(valores.valorMin)}</p>
+      <p><strong>Valor Recomendado (50% lucro):</strong> ${formatReal(valores.valorRec)}</p>
+      <p><strong>Valor Target (80% lucro):</strong> ${formatReal(valores.valorMax)}</p>
+    `;
+  }
+
+  // --- Funções de Eventos ---
+
+  // Lidar com a troca de telas
+  document.querySelectorAll("button.menu-btn").forEach(botao => {
+    botao.addEventListener("click", () => {
+      document.querySelectorAll("button.menu-btn").forEach(b => b.classList.remove("active"));
+      botao.classList.add("active");
+
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      const tela = botao.getAttribute("data-tela");
+      document.getElementById(tela).classList.add("active");
+    });
+  });
+
+  // Atualizar valores ao digitar/selecionar
+  document.querySelectorAll("input, select").forEach(elemento => {
+    elemento.addEventListener("input", atualizarExibicaoValores);
+  });
+
+  // Lidar com o envio do formulário
+  document.getElementById("btnEnviar").addEventListener("click", async () => {
+    const produto = document.getElementById("produto").value.trim();
+    const material = document.getElementById("material").value;
+    const quantidade = parseFloat(document.getElementById("quantidade").value);
+    const horas = parseFloat(document.getElementById("horas").value);
+    const maquina = document.getElementById("maquina").value;
+    const pintura = document.getElementById("pintura").value;
+
+    if (!produto || !material || isNaN(quantidade) || quantidade <= 0 || isNaN(horas) || horas <= 0 || !maquina || !pintura) {
+      alert("Por favor, preencha todos os campos corretamente.");
+      return;
+    }
+
+    const valoresCalculados = calcularValores();
+
+    const dados = {
+      produto,
+      material,
+      quantidade,
+      horas,
+      maquina,
+      pintura,
+      ...valoresCalculados
+    };
+    
+    // Alerta de envio para feedback imediato
+    alert("Enviando dados para o servidor...");
+
+    try {
+      // Requisicao com `mode: 'no-cors'` para funcionar do GitHub Pages
+      const response = await fetch(URL_APPS_SCRIPT, {
+        method: "POST",
+        body: JSON.stringify(dados),
+        mode: 'no-cors' 
+      });
+
+      // A resposta do 'no-cors' não pode ser lida, então assumimos sucesso
+      // se a requisição não lançar um erro.
+      alert("Orçamento enviado com sucesso!");
+
+      // Limpar os campos após o envio
+      document.getElementById("produto").value = "";
+      document.getElementById("material").value = "";
+      document.getElementById("quantidade").value = "";
+      document.getElementById("horas").value = "";
+      document.getElementById("maquina").value = "";
+      document.getElementById("pintura").value = "";
+      atualizarExibicaoValores();
+      
+    } catch (error) {
+      console.error("Erro ao enviar orçamento:", error);
+      alert("Erro ao enviar orçamento. Verifique sua conexão ou o console do navegador.");
+    }
+  });
+
+  // Atualizar valores na primeira carga da página
+  window.addEventListener("load", atualizarExibicaoValores);
+</script>
+
 </body>
 </html>
