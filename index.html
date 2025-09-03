@@ -176,12 +176,10 @@
 </section>
 
 <script>
-  // Função para formatar valores em reais
   function formatReal(valor) {
     return "R$ " + valor.toFixed(2).replace(".", ",");
   }
 
-  // Atualiza os valores no resultado
   function atualizarValores() {
     const produto = document.getElementById("produto").value;
     const material = document.getElementById("material").value;
@@ -221,30 +219,27 @@
     `;
   }
 
-  // Atualizar valores ao modificar os campos
+  // Atualizar valores ao mudar campos
   ["produto", "material", "quantidade", "horas", "maquina", "pintura"].forEach(id => {
     document.getElementById(id).addEventListener("input", atualizarValores);
     document.getElementById(id).addEventListener("change", atualizarValores);
   });
 
-  // Gerenciar troca de telas pelo menu superior
+  // Gerenciar troca de telas
   const botoesMenu = document.querySelectorAll("button.menu-btn");
   botoesMenu.forEach(botao => {
     botao.addEventListener("click", () => {
-      // Remove active de todos
       botoesMenu.forEach(b => b.classList.remove("active"));
       botao.classList.add("active");
 
-      // Esconde todas as telas
       document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
 
-      // Mostra a tela clicada
       const tela = botao.getAttribute("data-tela");
       document.getElementById(tela).classList.add("active");
     });
   });
 
-  // Evento do botão Enviar para enviar os dados para Google Sheets
+  // Envio dos dados para o Google Apps Script
   document.getElementById("btnEnviar").addEventListener("click", () => {
     const produto = document.getElementById("produto").value.trim();
     const material = document.getElementById("material").value;
@@ -258,7 +253,7 @@
       return;
     }
 
-    // Calcular os custos
+    // Calcular custos
     let custoFilamento = 0;
     if (material === "ABS") custoFilamento = (quantidade / 1000) * 100;
     else if (material === "PLA") custoFilamento = (quantidade / 1000) * 140;
@@ -306,7 +301,7 @@
     .then(response => response.text())
     .then(text => {
       alert("Orçamento enviado com sucesso!");
-      // Opcional: limpar campos após envio
+      // Limpar campos
       document.getElementById("produto").value = "";
       document.getElementById("material").value = "";
       document.getElementById("quantidade").value = "";
@@ -320,7 +315,6 @@
     });
   });
 
-  // Atualiza os valores na carga inicial
   window.addEventListener("load", atualizarValores);
 </script>
 
