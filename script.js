@@ -92,7 +92,7 @@ document.querySelectorAll("#telaGestao input, #telaGestao select").forEach(eleme
   elemento.addEventListener("input", atualizarExibicaoValores);
 });
 
-// Lidar com o envio de orçamento
+// Lidar com o envio de orçamento (continua o mesmo)
 document.getElementById("btnEnviar").addEventListener("click", async () => {
   const produto = document.getElementById("produto").value.trim();
   const material = document.getElementById("material").value;
@@ -118,7 +118,7 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
     ...valoresCalculados
   };
   
-  alert("Enviando dados para o servidor...");
+  alert("Enviando orçamento para o servidor...");
 
   try {
     await fetch(URL_APPS_SCRIPT, {
@@ -128,8 +128,6 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
     });
 
     alert("Orçamento enviado com sucesso!");
-
-    // Limpar os campos após o envio
     document.getElementById("produto").value = "";
     document.getElementById("material").value = "";
     document.getElementById("quantidade").value = "";
@@ -141,6 +139,60 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
   } catch (error) {
     console.error("Erro ao enviar orçamento:", error);
     alert("Erro ao enviar orçamento. Verifique sua conexão ou o console do navegador.");
+  }
+});
+
+// Lógica para registrar uma venda e atualizar o estoque
+document.getElementById("btnRegistrarVenda").addEventListener("click", async () => {
+  const produto = document.getElementById("produto").value.trim();
+  const material = document.getElementById("material").value;
+  const quantidade = parseFloat(document.getElementById("quantidade").value);
+  const horas = parseFloat(document.getElementById("horas").value);
+  const maquina = document.getElementById("maquina").value;
+  const pintura = document.getElementById("pintura").value;
+  const dataVenda = document.getElementById("dataVenda").value;
+
+  if (!produto || !material || isNaN(quantidade) || quantidade <= 0 || isNaN(horas) || horas <= 0 || !maquina || !pintura || !dataVenda) {
+    alert("Por favor, preencha todos os campos corretamente para registrar a venda.");
+    return;
+  }
+
+  const valoresCalculados = calcularValores();
+
+  const dadosVenda = {
+    isVenda: true, // Adiciona um marcador para o Apps Script identificar
+    dataVenda,
+    produto,
+    material,
+    quantidade,
+    horas,
+    maquina,
+    pintura,
+    ...valoresCalculados
+  };
+  
+  alert("Registrando venda...");
+
+  try {
+    await fetch(URL_APPS_SCRIPT, {
+      method: "POST",
+      body: JSON.stringify(dadosVenda),
+      mode: 'no-cors' 
+    });
+
+    alert("Venda registrada com sucesso! Estoque atualizado.");
+    document.getElementById("produto").value = "";
+    document.getElementById("material").value = "";
+    document.getElementById("quantidade").value = "";
+    document.getElementById("horas").value = "";
+    document.getElementById("maquina").value = "";
+    document.getElementById("pintura").value = "";
+    document.getElementById("dataVenda").value = "";
+    atualizarExibicaoValores();
+    
+  } catch (error) {
+    console.error("Erro ao registrar venda:", error);
+    alert("Erro ao registrar venda. Tente novamente.");
   }
 });
 
