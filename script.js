@@ -33,7 +33,17 @@ async function fetchOrcamentos() {
     if (!response.ok) {
       throw new Error("Erro ao buscar orçamentos: " + response.statusText);
     }
-    orcamentosData = await response.json();
+    const data = await response.json();
+    orcamentosData = data.map(row => {
+      return {
+        produto: row.produto,
+        material: row.material,
+        quantidade: parseFloat(row.quantidade),
+        horas: parseFloat(row.horas),
+        maquina: row.maquina,
+        pintura: row.pintura
+      };
+    });
     populateDatalist();
   } catch (error) {
     console.error("Erro ao buscar orçamentos:", error);
@@ -66,6 +76,14 @@ function preencherFormulario(produtoSelecionado) {
     document.getElementById("horas").value = produtoEncontrado.horas;
     document.getElementById("maquina").value = produtoEncontrado.maquina;
     document.getElementById("pintura").value = produtoEncontrado.pintura;
+    atualizarExibicaoValores();
+  } else {
+    // Se o produto não for encontrado, limpa os campos para um novo orçamento
+    document.getElementById("material").value = "";
+    document.getElementById("quantidade").value = "";
+    document.getElementById("horas").value = "";
+    document.getElementById("maquina").value = "";
+    document.getElementById("pintura").value = "";
     atualizarExibicaoValores();
   }
 }
