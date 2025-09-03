@@ -94,7 +94,7 @@ select:focus {
 }
 
 /* Botões de envio */
-#btnEnviar, #btnRegistrarVenda, #btnSalvarGasto, #btnAtualizarEstoque {
+#btnCalcular, #btnRegistrarVenda, #btnSalvarGasto, #btnAtualizarEstoque {
   margin-top: 25px;
   padding: 14px;
   width: 100%;
@@ -108,7 +108,7 @@ select:focus {
   transition: background-color 0.3s ease;
 }
 
-#btnEnviar:hover, #btnRegistrarVenda:hover, #btnSalvarGasto:hover, #btnAtualizarEstoque:hover {
+#btnCalcular:hover, #btnRegistrarVenda:hover, #btnSalvarGasto:hover, #btnAtualizarEstoque:hover {
   background-color: var(--success-hover-color);
 }
 
