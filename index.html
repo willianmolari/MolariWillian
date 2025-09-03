@@ -65,14 +65,46 @@
 </section>
 
 <section id="telaGastos">
-  <div class="container placeholder">
-    <p>Esta é a tela de Gastos.<br>Conteúdo a ser implementado.</p>
+  <div class="container">
+    <h2>Registro de Gastos</h2>
+    <label for="descricaoGasto">Descrição</label>
+    <input type="text" id="descricaoGasto" placeholder="Ex: Filamento PLA Azul" />
+
+    <label for="valorGasto">Valor (R$)</label>
+    <input type="number" id="valorGasto" min="0" step="0.01" />
+
+    <label for="dataGasto">Data</label>
+    <input type="date" id="dataGasto" />
+
+    <button id="btnSalvarGasto">Salvar Gasto</button>
   </div>
 </section>
 
 <section id="telaEstoque">
-  <div class="container placeholder">
-    <p>Esta é a tela de Estoque.<br>Conteúdo a ser implementado.</p>
+  <div class="container">
+    <h2>Atualização de Estoque</h2>
+    <label for="materialEstoque">Material</label>
+    <select id="materialEstoque">
+      <option value="">Selecione</option>
+      <option value="ABS">ABS</option>
+      <option value="PLA">PLA</option>
+      <option value="PETG">PETG</option>
+    </select>
+
+    <label for="quantidadeEstoque">Quantidade (g)</label>
+    <input type="number" id="quantidadeEstoque" min="0" step="1" />
+
+    <label for="tipoMovimento">Tipo de Movimento</label>
+    <select id="tipoMovimento">
+      <option value="">Selecione</option>
+      <option value="entrada">Entrada</option>
+      <option value="saida">Saída</option>
+    </select>
+
+    <label for="notaEstoque">Nota</label>
+    <input type="text" id="notaEstoque" placeholder="Ex: Recebimento de novo lote" />
+
+    <button id="btnAtualizarEstoque">Atualizar Estoque</button>
   </div>
 </section>
 
