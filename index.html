@@ -1,132 +1,178 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orçamento Impressão 3D - Gestão</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Orçamento Impressão 3D - Gestão</title>
+<!-- Link para o arquivo de estilo -->
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <header>
-    <nav>
-      <button class="menu-btn active" data-tela="telaGestao">Gestão Geral</button>
-      <button class="menu-btn" data-tela="telaGastos">Gastos</button>
-      <button class="menu-btn" data-tela="telaEstoque">Estoque</button>
-    </nav>
-  </header>
+<header>
+  <button class="menu-btn active" data-tela="telaGestao">Gestão Geral</button>
+  <button class="menu-btn" data-tela="telaGastos">Gastos</button>
+  <button class="menu-btn" data-tela="telaEstoque">Estoque</button>
+</header>
 
-  <main>
-    <h1>Orçamento Impressão 3D</h1>
+<h1>Orçamento Impressão 3D</h1>
 
-    <!-- Tela de Gestão Geral -->
-    <section id="telaGestao" class="active" aria-labelledby="tituloGestao">
-      <h2 id="tituloGestao" class="visually-hidden">Gestão Geral</h2>
-      <div class="container">
+<!-- Tela de Gestão Geral (Orçamento e Venda) -->
+<section id="telaGestao" class="active">
+  <div class="container">
+    <div class="input-group">
+      <label for="produto">Produto</label>
+      <input type="text" id="produto" placeholder="Nome do produto" />
+    </div>
 
-        <label for="produto">Produto</label>
-        <input list="produtos" id="produto" name="produto" placeholder="Digite ou selecione um produto" />
-        <datalist id="produtos"></datalist>
+    <div class="input-group">
+      <label for="material">Material</label>
+      <select id="material">
+        <option value="">Selecione</option>
+        <option value="ABS">ABS</option>
+        <option value="PLA">PLA</option>
+        <option value="PETG">PETG</option>
+      </select>
+    </div>
 
-        <label for="material">Material</label>
-        <select id="material" name="material" required>
-          <option value="">Selecione</option>
-          <option value="ABS">ABS</option>
-          <option value="PLA">PLA</option>
-          <option value="PETG">PETG</option>
-        </select>
+    <div class="input-group">
+      <label for="quantidade">Quantidade (g)</label>
+      <input type="number" id="quantidade" min="0" step="1" />
+    </div>
 
-        <label for="quantidade">Quantidade (g)</label>
-        <input type="number" id="quantidade" name="quantidade" min="0" step="1" required />
+    <div class="input-group">
+      <label for="horas">Horas de impressão</label>
+      <input type="number" id="horas" min="0" step="0.1" />
+    </div>
 
-        <label for="horas">Horas de impressão</label>
-        <input type="number" id="horas" name="horas" min="0" step="0.1" required />
+    <div class="input-group">
+      <label for="maquina">Máquina</label>
+      <select id="maquina">
+        <option value="">Selecione</option>
+        <option value="Ender 3 S1">Ender 3 S1</option>
+      </select>
+    </div>
 
-        <label for="maquina">Máquina</label>
-        <select id="maquina" name="maquina" required>
-          <option value="">Selecione</option>
-          <option value="Ender 3 S1">Ender 3 S1</option>
-        </select>
+    <div class="input-group">
+      <label for="pintura">Pintura</label>
+      <select id="pintura">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </div>
 
-        <label for="pintura">Pintura</label>
-        <select id="pintura" name="pintura" required>
-          <option value="">Selecione</option>
-          <option value="Sim">Sim</option>
-          <option value="Não">Não</option>
-        </select>
+    <div class="input-group">
+      <label for="dataVenda">Data</label>
+      <input type="date" id="dataVenda" />
+    </div>
 
-        <label for="dataVenda">Data</label>
-        <input type="date" id="dataVenda" name="dataVenda" required />
+    <button id="btnCalcular">Calcular Orçamento</button>
+    <button id="btnRegistrarVenda">Registrar Venda</button>
 
-        <div class="buttons">
-          <button id="btnCalcular" type="button">Calcular Orçamento</button>
-          <button id="btnRegistrarVenda" type="button">Registrar Venda</button>
-        </div>
+    <div class="result" id="resultado">
+      <p><strong>Custo Filamento:</strong> R$ 0,00</p>
+      <p><strong>Custo Luz:</strong> R$ 0,00</p>
+      <p><strong>Taxa Máquina:</strong> R$ 0,00</p>
+      <p><strong>Taxa Pintura:</strong> R$ 0,00</p>
+      <p><strong>Custo Real:</strong> R$ 0,00</p>
+      <p><strong>Valor Mínimo (35% lucro):</strong> R$ 0,00</p>
+      <p><strong>Valor Recomendado (50% lucro):</strong> R$ 0,00</p>
+      <p><strong>Valor Target (80% lucro):</strong> R$ 0,00</p>
+    </div>
+  </div>
+</section>
 
-        <div class="result" id="resultado" aria-live="polite">
-          <p><strong>Custo Filamento:</strong> R$ 0,00</p>
-          <p><strong>Custo Luz:</strong> R$ 0,00</p>
-          <p><strong>Taxa Máquina:</strong> R$ 0,00</p>
-          <p><strong>Taxa Pintura:</strong> R$ 0,00</p>
-          <p><strong>Custo Real:</strong> R$ 0,00</p>
-          <p><strong>Valor Mínimo (35% lucro):</strong> R$ 0,00</p>
-          <p><strong>Valor Recomendado (50% lucro):</strong> R$ 0,00</p>
-          <p><strong>Valor Target (80% lucro):</strong> R$ 0,00</p>
-        </div>
+<!-- Tela de Gastos -->
+<section id="telaGastos">
+  <div class="container">
+    <h2>Registro de Gastos</h2>
 
+    <div class="input-group">
+      <label for="tipoGasto">Tipo de Gasto</label>
+      <select id="tipoGasto">
+        <option value="luz">Luz</option>
+        <option value="filamento">Filamento</option>
+        <option value="taxa">Taxas</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+
+    <div id="camposGastos">
+      <!-- Campos específicos de acordo com o tipo de gasto -->
+      <div id="campo-luz">
+        <label for="gastoLuz">Valor da Conta de Luz (R$)</label>
+        <input type="number" id="gastoLuz" min="0" step="0.01" />
       </div>
-    </section>
+    </div>
 
-    <!-- Tela de Gastos -->
-    <section id="telaGastos" aria-labelledby="tituloGastos">
-      <h2 id="tituloGastos">Registro de Gastos</h2>
-      <div class="container">
+    <div class="input-group">
+      <label for="dataGasto">Data</label>
+      <input type="date" id="dataGasto" />
+    </div>
 
-        <label for="descricaoGasto">Descrição</label>
-        <input type="text" id="descricaoGasto" name="descricaoGasto" placeholder="Ex: Filamento PLA Azul" required />
+    <button id="btnSalvarGasto">Salvar Gasto</button>
+  </div>
 
-        <label for="valorGasto">Valor (R$)</label>
-        <input type="number" id="valorGasto" name="valorGasto" min="0" step="0.01" required />
+  <div class="container tabela-gastos-container">
+    <h2>Consulta de Gastos</h2>
+    <div id="gastos-loading" class="loading-message">Carregando gastos...</div>
+    <div id="tabelaGastos">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Valor (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Os gastos serão inseridos aqui pelo JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-        <label for="dataGasto">Data</label>
-        <input type="date" id="dataGasto" name="dataGasto" required />
+<!-- Tela de Estoque -->
+<section id="telaEstoque">
+  <div class="container">
+    <h2>Atualização de Estoque</h2>
+    <div class="input-group">
+      <label for="materialEstoque">Material</label>
+      <select id="materialEstoque">
+        <option value="">Selecione</option>
+        <option value="ABS">ABS</option>
+        <option value="PLA">PLA</option>
+        <option value="PETG">PETG</option>
+      </select>
+    </div>
 
-        <button id="btnSalvarGasto" type="button">Salvar Gasto</button>
-      </div>
-    </section>
+    <div class="input-group">
+      <label for="quantidadeEstoque">Quantidade (g)</label>
+      <input type="number" id="quantidadeEstoque" min="0" step="1" />
+    </div>
 
-    <!-- Tela de Estoque -->
-    <section id="telaEstoque" aria-labelledby="tituloEstoque">
-      <h2 id="tituloEstoque">Atualização de Estoque</h2>
-      <div class="container">
+    <div class="input-group">
+      <label for="tipoMovimento">Tipo de Movimento</label>
+      <select id="tipoMovimento">
+        <option value="">Selecione</option>
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+    </div>
 
-        <label for="materialEstoque">Material</label>
-        <select id="materialEstoque" name="materialEstoque" required>
-          <option value="">Selecione</option>
-          <option value="ABS">ABS</option>
-          <option value="PLA">PLA</option>
-          <option value="PETG">PETG</option>
-        </select>
+    <div class="input-group">
+      <label for="notaEstoque">Nota</label>
+      <input type="text" id="notaEstoque" placeholder="Ex: Recebimento de novo lote" />
+    </div>
 
-        <label for="quantidadeEstoque">Quantidade (g)</label>
-        <input type="number" id="quantidadeEstoque" name="quantidadeEstoque" min="0" step="1" required />
+    <button id="btnAtualizarEstoque">Atualizar Estoque</button>
+  </div>
+</section>
 
-        <label for="tipoMovimento">Tipo de Movimento</label>
-        <select id="tipoMovimento" name="tipoMovimento" required>
-          <option value="">Selecione</option>
-          <option value="entrada">Entrada</option>
-          <option value="saida">Saída</option>
-        </select>
-
-        <label for="notaEstoque">Nota</label>
-        <input type="text" id="notaEstoque" name="notaEstoque" placeholder="Ex: Recebimento de novo lote" />
-
-        <button id="btnAtualizarEstoque" type="button">Atualizar Estoque</button>
-
-      </div>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
+<!-- Link para o arquivo de script -->
+<script src="script.js"></script>
 </body>
 </html>
