@@ -22,7 +22,8 @@
   <div class="container">
 
     <label for="produto">Produto</label>
-    <input type="text" id="produto" placeholder="Digite o nome do produto" />
+    <input list="produtos" id="produto" placeholder="Digite ou selecione um produto" />
+    <datalist id="produtos"></datalist>
 
     <label for="material">Material</label>
     <select id="material">
@@ -54,7 +55,7 @@
     <label for="dataVenda">Data</label>
     <input type="date" id="dataVenda" />
 
-    <button id="btnEnviar">Calcular Orçamento</button>
+    <button id="btnCalcular">Calcular Orçamento</button>
     <button id="btnRegistrarVenda">Registrar Venda</button>
 
     <div class="result" id="resultado">
