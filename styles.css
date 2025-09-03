@@ -63,12 +63,16 @@ h1 {
   padding: 25px;
   border-radius: 12px;
   box-shadow: var(--box-shadow);
+  margin-bottom: 20px; /* Adiciona espaçamento entre os containers */
 }
 
 /* Estilo dos campos de formulário */
+.input-group {
+  margin-top: 15px;
+}
+
 label {
   display: block;
-  margin-top: 15px;
   font-weight: bold;
   color: var(--text-color);
 }
@@ -94,7 +98,7 @@ select:focus {
 }
 
 /* Botões de envio */
-#btnCalcular, #btnRegistrarVenda, #btnSalvarGasto, #btnAtualizarEstoque {
+button {
   margin-top: 25px;
   padding: 14px;
   width: 100%;
@@ -108,8 +112,12 @@ select:focus {
   transition: background-color 0.3s ease;
 }
 
-#btnCalcular:hover, #btnRegistrarVenda:hover, #btnSalvarGasto:hover, #btnAtualizarEstoque:hover {
-  background-color: var(--success-hover-color);
+#btnCalcular, #btnSalvarGasto, #btnAtualizarEstoque {
+  background-color: var(--primary-color);
+}
+
+#btnCalcular:hover, #btnSalvarGasto:hover, #btnAtualizarEstoque:hover {
+  background-color: var(--primary-hover-color);
 }
 
 #btnRegistrarVenda {
@@ -119,6 +127,20 @@ select:focus {
 #btnRegistrarVenda:hover {
   background-color: #e68a00;
 }
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}
+
 
 /* Seção de resultados */
 .result {
@@ -143,6 +165,44 @@ section {
 
 section.active {
   display: block;
+}
+
+/* Estilo da Tabela de Gastos */
+.tabela-gastos-container {
+  max-width: 600px;
+}
+
+#tabelaGastos {
+  overflow-x: auto;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--input-border-color);
+}
+
+#tabelaGastos table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#tabelaGastos thead th {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+#tabelaGastos tbody tr:nth-child(even) {
+  background-color: var(--bg-color);
+}
+
+#tabelaGastos tbody td {
+  padding: 10px;
+  border-bottom: 1px solid var(--input-border-color);
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  color: #888;
 }
 
 /* Media Queries para responsividade */
