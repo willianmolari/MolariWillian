@@ -6,7 +6,6 @@
 <title>Orçamento Impressão 3D - Gestão</title>
 
 <style>
-  /* Variáveis CSS */
   :root {
     --primary-color: #007bff;
     --primary-hover-color: #0056b3;
@@ -19,14 +18,16 @@
     --input-border-color: #ccc;
     --result-bg-color: #e6f2ff;
     --border-radius: 8px;
-    --box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
   body {
     font-family: Arial, sans-serif;
-    background: var(--bg-color);
+    background-color: var(--bg-color);
+    margin: 0;
     padding: 20px;
     color: var(--text-color);
+    line-height: 1.6;
   }
 
   header {
@@ -37,22 +38,30 @@
   }
 
   .menu-btn {
-    background: var(--primary-color);
-    color: #fff;
+    background-color: var(--primary-color);
+    color: white;
     border: none;
     padding: 12px 20px;
     border-radius: var(--border-radius);
+    font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.3s ease;
   }
 
-  .menu-btn.active,
-  .menu-btn:hover {
-    background: var(--primary-hover-color);
+  .menu-btn:hover,
+  .menu-btn.active {
+    background-color: var(--primary-hover-color);
+  }
+
+  h1 {
+    text-align: center;
+    color: var(--heading-color);
+    margin-bottom: 20px;
   }
 
   .container {
     max-width: 480px;
-    margin: auto;
+    margin: 0 auto;
     background: var(--container-bg-color);
     padding: 25px;
     border-radius: 12px;
@@ -65,41 +74,56 @@
     font-weight: bold;
   }
 
-  input, select {
+  input[type="number"],
+  input[type="text"],
+  select {
     width: 100%;
-    padding: 10px;
+    padding: 10px 12px;
     margin-top: 6px;
     border-radius: 6px;
     border: 1px solid var(--input-border-color);
+    font-size: 16px;
   }
 
-  #btnEnviar {
+  #btnEnviar, #btnGerar {
     margin-top: 20px;
-    width: 100%;
     padding: 14px;
+    width: 100%;
     background: var(--success-color);
-    color: #fff;
+    color: white;
     border: none;
     border-radius: var(--border-radius);
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
   }
 
-  #btnEnviar:hover {
-    background: var(--success-hover-color);
+  #btnGerar {
+    background: #6f42c1;
+  }
+
+  #btnGerar:hover {
+    background: #55318f;
   }
 
   .result {
-    background: var(--result-bg-color);
-    margin-top: 20px;
+    background-color: var(--result-bg-color);
     padding: 15px;
+    margin-top: 25px;
     border-radius: var(--border-radius);
   }
 
   section { display: none; }
   section.active { display: block; }
 
+  .placeholder {
+    text-align: center;
+    padding: 50px 20px;
+    color: #666;
+  }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -108,37 +132,36 @@
   <button class="menu-btn" data-tela="telaEstoque">Estoque</button>
 </header>
 
-<h1 style="text-align:center">Orçamento Impressão 3D</h1>
+<h1>Orçamento Impressão 3D</h1>
 
 <section id="telaGestao" class="active">
   <div class="container">
 
-    <label for="produto">Produto</label>
+    <label>Produto</label>
     <input type="text" id="produto" placeholder="Digite o nome do produto">
 
-    <label for="material">Material</label>
+    <label>Material</label>
     <select id="material">
       <option value="">Selecione</option>
       <option value="ABS">ABS</option>
       <option value="PLA">PLA</option>
       <option value="PETG">PETG</option>
-      <option value="RESINA">Resina (LD-002R)</option>
     </select>
 
-    <label for="quantidade">Quantidade (g ou ml)</label>
+    <label>Peso (gramas)</label>
     <input type="number" id="quantidade" min="0">
 
-    <label for="horas">Horas de impressão</label>
+    <label>Horas de impressão</label>
     <input type="number" id="horas" min="0" step="0.1">
 
-    <label for="maquina">Máquina</label>
+    <label>Máquina</label>
     <select id="maquina">
       <option value="">Selecione</option>
       <option value="Ender 3 S1">Ender 3 S1</option>
-      <option value="Creality LD-002R">Creality LD-002R (Resina)</option>
+      <option value="LD-002R">Creality LD-002R (Resina)</option>
     </select>
 
-    <label for="pintura">Pintura</label>
+    <label>Pintura</label>
     <select id="pintura">
       <option value="">Selecione</option>
       <option value="Sim">Sim</option>
@@ -147,7 +170,19 @@
 
     <button id="btnEnviar">Enviar Orçamento</button>
 
+    <label>Margem de Lucro</label>
+    <select id="lucroSelect">
+      <option value="0.35">35% (mínimo)</option>
+      <option value="0.50">50% (recomendado)</option>
+      <option value="0.80">80% (target)</option>
+      <option value="0.00">0% (somente custo)</option>
+    </select>
+
+    <button id="btnGerar">Gerar Orçamento</button>
+
     <div class="result" id="resultado"></div>
+
+    <div class="result" id="orcamentoGerado" style="display:none;"></div>
 
   </div>
 </section>
@@ -161,110 +196,86 @@
 </section>
 
 <script>
-  const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxbkJd-cMeVIq3NAkbSHIFL5vB01Y-oC5cZuu0wosYTdE-Ja9DgOuzW8SwxSFdSSiyfXA/exec";
+  const URL_APPS_SCRIPT = "URL_AQUI";
 
   const PRECO_KWH = 0.82607;
-  const CONSUMO_KW = 0.12;            // Ender 3 S1
-  const CONSUMO_LD002 = 0.05;         // Aproximado da LD-002R
-  const TAXA_MAQUINA_HORA = 2;
-  const TAXA_PINTURA = 4;
+  const CONSUMO_KW = {
+    "Ender 3 S1": 0.12,
+    "LD-002R": 0.05
+  };
 
   const PRECOS_FILAMENTO_KG = {
     "ABS": 100,
     "PLA": 140,
-    "PETG": 120,
-    "RESINA": 140
+    "PETG": 120
   };
 
+  const TAXA_MAQUINA_HORA = 2;
+  const TAXA_PINTURA = 4;
+
   function formatReal(v) {
-    return "R$ " + (isNaN(v) ? 0 : v).toFixed(2).replace(".", ",");
+    return "R$ " + v.toFixed(2).replace(".", ",");
   }
 
   function calcularValores() {
-    const material = document.getElementById("material").value;
-    const quantidade = parseFloat(document.getElementById("quantidade").value) || 0;
-    const horas = parseFloat(document.getElementById("horas").value) || 0;
-    const maquina = document.getElementById("maquina").value;
-    const pintura = document.getElementById("pintura").value;
+    const material = material.value;
+    const qtd = parseFloat(quantidade.value) || 0;
+    const horasVal = parseFloat(horas.value) || 0;
+    const maquinaSel = maquina.value;
+    const pinturaSel = pintura.value;
 
-    const precoKg = PRECOS_FILAMENTO_KG[material] || 0;
-    const custoFilamento = (quantidade / 1000) * precoKg;
-
-    let consumo = 0;
-    if (maquina === "Ender 3 S1") consumo = CONSUMO_KW;
-    if (maquina === "Creality LD-002R") consumo = CONSUMO_LD002;
-
-    const custoLuz = consumo * PRECO_KWH * horas;
-    const taxaMaquina = TAXA_MAQUINA_HORA * horas;
-    const taxaPintura = pintura === "Sim" ? TAXA_PINTURA : 0;
+    const custoFilamento = (qtd / 1000) * (PRECOS_FILAMENTO_KG[material] || 0);
+    const custoLuz = (CONSUMO_KW[maquinaSel] || 0) * PRECO_KWH * horasVal;
+    const taxaMaquina = TAXA_MAQUINA_HORA * horasVal;
+    const taxaPintura = pinturaSel === "Sim" ? TAXA_PINTURA : 0;
 
     const custoReal = custoFilamento + custoLuz + taxaMaquina + taxaPintura;
 
-    return {
-      custoFilamento,
-      custoLuz,
-      taxaMaquina,
-      taxaPintura,
-      custoReal,
-      valorMin: custoReal / 0.65,
-      valorRec: custoReal / 0.5,
-      valorMax: custoReal / 0.2
-    };
+    return { custoFilamento, custoLuz, taxaMaquina, taxaPintura, custoReal };
   }
 
   function atualizarExibicaoValores() {
     const v = calcularValores();
-    document.getElementById("resultado").innerHTML = `
-      <p><strong>Custo Material:</strong> ${formatReal(v.custoFilamento)}</p>
+    resultado.innerHTML = `
+      <p><strong>Custo Filamento:</strong> ${formatReal(v.custoFilamento)}</p>
       <p><strong>Custo Luz:</strong> ${formatReal(v.custoLuz)}</p>
       <p><strong>Taxa Máquina:</strong> ${formatReal(v.taxaMaquina)}</p>
       <p><strong>Taxa Pintura:</strong> ${formatReal(v.taxaPintura)}</p>
-
-      <p><strong>Custo Real:</strong> ${formatReal(v.custoReal)}</p>
-
-      <p><strong>Valor Mínimo (35% lucro):</strong> ${formatReal(v.valorMin)}</p>
-      <p><strong>Valor Recomendado (50% lucro):</strong> ${formatReal(v.valorRec)}</p>
-      <p><strong>Valor Target (80% lucro):</strong> ${formatReal(v.valorMax)}</p>
+      <p><strong>Custo Total:</strong> ${formatReal(v.custoReal)}</p>
     `;
   }
 
-  document.querySelectorAll("input, select").forEach(el =>
-    el.addEventListener("input", atualizarExibicaoValores)
-  );
-
-  document.querySelectorAll(".menu-btn").forEach(btn =>
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".menu-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
-      document.getElementById(btn.dataset.tela).classList.add("active");
-    })
-  );
-
-  document.getElementById("btnEnviar").addEventListener("click", async () => {
-    alert("Enviando dados...");
-
-    const dados = {
-      action: "addOrcamento",
-      ...calcularValores()
-    };
-
-    try {
-      await fetch(URL_APPS_SCRIPT, {
-        method: "POST",
-        body: JSON.stringify(dados),
-        mode: "no-cors"
-      });
-
-      alert("Enviado com sucesso!");
-    } catch (e) {
-      alert("Erro ao enviar.");
-      console.error(e);
-    }
+  document.querySelectorAll("input, select").forEach(e => {
+    e.addEventListener("input", atualizarExibicaoValores);
   });
 
-  window.addEventListener("load", atualizarExibicaoValores);
+  btnGerar.addEventListener("click", () => {
+    const produtoNome = produto.value.trim();
+    const mat = material.value;
+    const peso = quantidade.value;
+    const lucro = parseFloat(lucroSelect.value);
+
+    if (!produtoNome || !mat || !peso) {
+      alert("Preencha Produto, Material e Peso!");
+      return;
+    }
+
+    const v = calcularValores();
+    const preco = lucro === 0 ? v.custoReal : v.custoReal / (1 - lucro);
+
+    const box = document.getElementById("orcamentoGerado");
+    box.style.display = "block";
+
+    box.innerHTML = `
+      <p><strong>Produto:</strong> ${produtoNome}</p>
+      <p><strong>Material:</strong> ${mat}</p>
+      <p><strong>Peso:</strong> ${peso} g</p>
+      <p><strong>Margem:</strong> ${(lucro * 100).toFixed(0)}%</p>
+      <p><strong>Valor Final:</strong> ${formatReal(preco)}</p>
+    `;
+  });
+
+  window.onload = atualizarExibicaoValores;
 </script>
 
 </body>
