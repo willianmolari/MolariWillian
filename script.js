@@ -1,4 +1,4 @@
-// Variáveis e Constantes
+// ---------------- CONSTANTES ---------------------
 const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxbkJd-cMeVIq3NAkbSHIFL5vB01Y-oC5cZuu0wosYTdE-Ja9DgOuzW8SwxSFdSSiyfXA/exec";
 const PRECO_KWH = 0.82607;
 
@@ -15,7 +15,7 @@ const PRECOS_FILAMENTO_KG = {
   "RESINA": 150
 };
 
-// Funções de Utilitário
+// ---------------- UTILITÁRIOS -------------------
 function formatReal(valor) {
   if (isNaN(valor)) return "R$ 0,00";
   return "R$ " + valor.toFixed(2).replace(".", ",");
@@ -36,7 +36,6 @@ function calcularValores() {
   if (maquina === "Creality LD-002R") consumo = CONSUMO_KW_LD002R;
 
   const custoLuz = consumo * PRECO_KWH * horas;
-
   const taxaMaquina = TAXA_MAQUINA_HORA * horas;
   const taxaPintura = pintura === "Sim" ? TAXA_PINTURA : 0;
 
@@ -131,8 +130,32 @@ function agruparPorMes(gastos) {
   }, {});
 }
 
-// ---------------- EVENTOS ---------------------
+// ---------------- ORÇAMENTO ---------------------
+function gerarOrcamentoPersonalizado() {
+  const produto = document.getElementById("produto").value.trim();
+  const material = document.getElementById("material").value;
+  const quantidade = parseFloat(document.getElementById("quantidade").value) || 0;
+  const lucroPercent = parseFloat(document.getElementById("lucroPercent").value) || 0;
 
+  if (!produto || !material || quantidade <= 0) {
+    alert("Preencha o nome do produto, material e quantidade corretamente.");
+    return;
+  }
+
+  const valores = calcularValores();
+  const valorComLucro = valores.custoReal / (1 - lucroPercent / 100);
+
+  const resultadoDiv = document.getElementById("orcamentoPersonalizado");
+  resultadoDiv.innerHTML = `
+    <h3>Orçamento Gerado</h3>
+    <p><strong>Produto:</strong> ${produto}</p>
+    <p><strong>Material:</strong> ${material}</p>
+    <p><strong>Peso do material (g):</strong> ${quantidade}</p>
+    <p><strong>Valor final com ${lucroPercent}% de lucro:</strong> ${formatReal(valorComLucro)}</p>
+  `;
+}
+
+// ---------------- EVENTOS ---------------------
 document.querySelectorAll("button.menu-btn").forEach(botao => {
   botao.addEventListener("click", () => {
     document.querySelectorAll("button.menu-btn").forEach(b => b.classList.remove("active"));
@@ -190,7 +213,10 @@ document.getElementById("btnCalcular").addEventListener("click", async () => {
   }
 });
 
-// SALVAR GASTOS
+// BOTÃO DE GERAR ORÇAMENTO PERSONALIZADO
+document.getElementById("btnGerarOrcamento").addEventListener("click", gerarOrcamentoPersonalizado);
+
+// ---------------- GASTOS DINÂMICOS ---------------------
 document.getElementById("tipoGasto").addEventListener('change', () => {
   const tipo = document.getElementById('tipoGasto').value;
   const campos = document.getElementById('camposGastos');
@@ -219,7 +245,7 @@ document.getElementById("tipoGasto").addEventListener('change', () => {
   campos.innerHTML = templates[tipo] || "";
 });
 
-// ESTOQUE
+// ---------------- ESTOQUE ---------------------
 document.getElementById("btnAtualizarEstoque").addEventListener("click", async () => {
   const materialEstoque = document.getElementById("materialEstoque").value;
   const quantidadeEstoque = parseFloat(document.getElementById("quantidadeEstoque").value);
@@ -252,7 +278,7 @@ document.getElementById("btnAtualizarEstoque").addEventListener("click", async (
   }
 });
 
-// Inicialização
+// ---------------- INICIALIZAÇÃO ---------------------
 window.addEventListener("load", () => {
   atualizarExibicaoValores();
   document.getElementById('dataVenda').value = new Date().toISOString().split('T')[0];
