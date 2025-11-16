@@ -6,13 +6,13 @@ const CONSUMO_KW = 0.12;         // Ender 3 S1
 const CONSUMO_KW_LD002R = 0.05;  // Creality LD-002R (estimado)
 
 const TAXA_MAQUINA_HORA = 2;
-const TAXA_PINTURA = 4;
+const TAXA_PINTURA = 15;
 
 const PRECOS_FILAMENTO_KG = {
   "ABS": 100,
-  "PLA": 140,
+  "PLA": 120,
   "PETG": 120,
-  "RESINA": 140
+  "RESINA": 150
 };
 
 // Funções de Utilitário
