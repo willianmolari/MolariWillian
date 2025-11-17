@@ -1,224 +1,237 @@
 /* Variáveis CSS para facilitar a personalização */
 :root {
-  --primary-color: #007bff;
-  --primary-hover-color: #0056b3;
-  --success-color: #28a745;
-  --success-hover-color: #1e7e34;
-  --bg-color: #f5f5f5;
-  --container-bg-color: #fff;
-  --text-color: #333;
-  --heading-color: #444;
-  --input-border-color: #ccc;
-  --result-bg-color: #e6f2ff;
-  --border-radius: 8px;
-  --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --success-color: #28a745;
+    --success-hover-color: #1e7e34;
+    --bg-color: #f5f5f5;
+    --container-bg-color: #fff;
+    --text-color: #333;
+    --heading-color: #444;
+    --input-border-color: #ccc;
+    --result-bg-color: #e6f2ff;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Estilo geral */
 body {
-  font-family: Arial, sans-serif;
-  background-color: var(--bg-color);
-  margin: 0;
-  padding: 20px;
-  color: var(--text-color);
-  line-height: 1.6;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 20px;
+    color: var(--text-color);
+    line-height: 1.6;
 }
 
 /* Cabeçalho e botões de navegação */
 header {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
 }
 
 .menu-btn {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .menu-btn:hover,
 .menu-btn.active {
-  background-color: var(--primary-hover-color);
+    background-color: var(--primary-hover-color);
 }
 
 /* Título principal */
 h1 {
-  text-align: center;
-  color: var(--heading-color);
-  margin-bottom: 20px;
+    text-align: center;
+    color: var(--heading-color);
+    margin-bottom: 20px;
 }
 
 /* Container principal */
 .container {
-  max-width: 480px;
-  margin: 0 auto;
-  background: var(--container-bg-color);
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: var(--box-shadow);
-  margin-bottom: 20px; /* Adiciona espaçamento entre os containers */
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--container-bg-color);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+    margin-bottom: 20px; /* Adiciona espaçamento entre os containers */
 }
 
 /* Estilo dos campos de formulário */
 .input-group {
-  margin-top: 15px;
+    margin-top: 15px;
 }
 
 label {
-  display: block;
-  font-weight: bold;
-  color: var(--text-color);
+    display: block;
+    font-weight: bold;
+    color: var(--text-color);
 }
 
 input[type="number"],
 input[type="text"],
 input[type="date"],
 select {
-  width: 100%;
-  padding: 10px 12px;
-  margin-top: 6px;
-  border-radius: 6px;
-  border: 1px solid var(--input-border-color);
-  font-size: 16px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: 1px solid var(--input-border-color);
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
 }
 
 input:focus,
 select:focus {
-  outline: none;
-  border-color: var(--primary-color);
+    outline: none;
+    border-color: var(--primary-color);
 }
 
 /* Botões de envio */
 button {
-  margin-top: 25px;
-  padding: 14px;
-  width: 100%;
-  background: var(--success-color);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius);
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    margin-top: 25px;
+    padding: 14px;
+    width: 100%;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
 }
 
 #btnCalcular, #btnSalvarGasto, #btnAtualizarEstoque {
-  background-color: var(--primary-color);
+    background-color: var(--primary-color);
 }
 
 #btnCalcular:hover, #btnSalvarGasto:hover, #btnAtualizarEstoque:hover {
-  background-color: var(--primary-hover-color);
+    background-color: var(--primary-hover-color);
 }
 
 #btnRegistrarVenda {
-  background-color: #ff9800;
+    background-color: #ff9800;
 }
 
 #btnRegistrarVenda:hover {
-  background-color: #e68a00;
+    background-color: #e68a00;
+}
+
+#btnGerarOrcamento {
+    background-color: #5bc0de;
+}
+
+#btnGerarOrcamento:hover {
+    background-color: #31b0d5;
 }
 
 .delete-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    font-size: 14px;
+    margin: 0;
 }
 
 .delete-btn:hover {
-  background: #c82333;
+    background: #c82333;
 }
 
 
 /* Seção de resultados */
 .result {
-  background-color: var(--result-bg-color);
-  padding: 15px;
-  margin-top: 25px;
-  border-radius: var(--border-radius);
+    background-color: var(--result-bg-color);
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: var(--border-radius);
 }
 
 .result p {
-  margin: 8px 0;
+    margin: 8px 0;
 }
 
 .result p strong {
-  color: var(--heading-color);
+    color: var(--heading-color);
 }
 
 /* Gerenciamento de telas */
 section {
-  display: none;
+    display: none;
 }
 
 section.active {
-  display: block;
+    display: block;
 }
 
 /* Estilo da Tabela de Gastos */
 .tabela-gastos-container {
-  max-width: 600px;
+    max-width: 600px;
+    margin: 20px auto;
 }
 
 #tabelaGastos {
-  overflow-x: auto;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--input-border-color);
+    overflow-x: auto;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--input-border-color);
 }
 
 #tabelaGastos table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 #tabelaGastos thead th {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 12px;
-  text-align: left;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px;
+    text-align: left;
 }
 
 #tabelaGastos tbody tr:nth-child(even) {
-  background-color: var(--bg-color);
+    background-color: var(--bg-color);
 }
 
 #tabelaGastos tbody td {
-  padding: 10px;
-  border-bottom: 1px solid var(--input-border-color);
+    padding: 10px;
+    border-bottom: 1px solid var(--input-border-color);
 }
 
 .loading-message {
-  text-align: center;
-  padding: 20px;
-  color: #888;
+    text-align: center;
+    padding: 20px;
+    color: #888;
 }
 
 /* Media Queries para responsividade */
 @media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-  .container {
-    padding: 20px;
-  }
-  header {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  .menu-btn {
-    width: 100%;
-  }
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 20px;
+    }
+    header {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    .menu-btn {
+        width: 100%;
+    }
 }
