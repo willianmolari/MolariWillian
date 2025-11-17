@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Orçamento Impressão 3D - Gestão</title>
-    <link rel="stylesheet" href="styles.css" />
     <style>
         /* Variáveis CSS para facilitar a personalização */
         :root {
@@ -118,7 +117,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-bottom: 10px; /* Adicionado para espaçar botões */
+            margin-bottom: 10px;
         }
 
         #btnCalcular, #btnSalvarGasto, #btnAtualizarEstoque {
@@ -313,9 +312,8 @@
                 <input type="number" id="lucroPercent" min="0" step="1" value="50" />
             </div>
 
-            <button id="btnCalcular">Calcular Valores (Recomendado)</button>
-            <button id="btnRegistrarVenda">Registrar Venda</button>
-            <button id="btnEnviar">Enviar Orçamento (Simples)</button>
+            <button id="btnCalcular">Calcular Valores (Exibir Detalhes)</button>
+            <button id="btnRegistrarVenda">Registrar Venda (Salvar no Banco)</button>
             <button id="btnGerarOrcamento">Gerar Orçamento Personalizado</button>
 
             <div class="result" id="resultado">
