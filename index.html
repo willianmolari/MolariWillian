@@ -3,69 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Orçamento</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Calculadora de Custos 3D</title>
+  <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-
+  <!-- Cabeçalho / Menu -->
   <header>
-    <button class="menu-btn active" data-tela="telaCalculo">Cálculo</button>
+    <button class="menu-btn active" data-tela="telaCalculo">Calcular Orçamento</button>
     <button class="menu-btn" data-tela="telaGastos">Gastos</button>
     <button class="menu-btn" data-tela="telaEstoque">Estoque</button>
   </header>
 
+  <!-- Seção de cálculo -->
   <section id="telaCalculo" class="active container">
-    <!-- Campos de cálculo e resultado -->
-    <input id="produto" placeholder="Produto" type="text">
-    <select id="material">
-      <option value="PLA">PLA</option>
-      <option value="ABS">ABS</option>
-      <option value="PETG">PETG</option>
-      <option value="RESINA">RESINA</option>
-    </select>
-    <input id="quantidade" placeholder="Quantidade (g)" type="number">
-    <input id="horas" placeholder="Horas de produção" type="number">
-    <select id="maquina">
-      <option>Ender 3 S1</option>
-      <option>Creality LD-002R</option>
-    </select>
-    <select id="pintura">
-      <option>Sim</option>
-      <option>Não</option>
-    </select>
-    <button id="btnCalcular">Calcular</button>
+    <h1>Calculadora de Custos 3D</h1>
+    <div class="input-group">
+      <label>Produto</label>
+      <input type="text" id="produto">
+    </div>
+    <div class="input-group">
+      <label>Material</label>
+      <select id="material">
+        <option value="PLA">PLA</option>
+        <option value="ABS">ABS</option>
+        <option value="PETG">PETG</option>
+        <option value="RESINA">RESINA</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Peso do material (g)</label>
+      <input type="number" id="quantidade">
+    </div>
+    <div class="input-group">
+      <label>Horas de impressão</label>
+      <input type="number" id="horas">
+    </div>
+    <div class="input-group">
+      <label>Máquina</label>
+      <select id="maquina">
+        <option value="Ender 3 S1">Ender 3 S1</option>
+        <option value="Creality LD-002R">Creality LD-002R</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Pintura</label>
+      <select id="pintura">
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Data da venda</label>
+      <input type="date" id="dataVenda">
+    </div>
+    <button id="btnCalcular">Calcular Orçamento</button>
 
-    <div id="resultado" class="result"></div>
+    <div class="result" id="resultado"></div>
+
+    <hr>
+
+    <h2>Gerar Orçamento Personalizado</h2>
+    <div class="input-group">
+      <label>Lucro (%)</label>
+      <input type="number" id="lucroPercent" value="50">
+    </div>
+    <button id="btnGerarOrcamento">Gerar Orçamento</button>
+    <div class="result" id="orcamentoPersonalizado"></div>
   </section>
 
+  <!-- Seção de gastos -->
   <section id="telaGastos" class="container">
-    <div class="tabela-gastos-container">
-      <div id="gastos-loading" class="loading-message" style="display:none;">Carregando...</div>
-      <div id="tabelaGastos">
-        <table>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Tipo</th>
-              <th>Valor</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+    <h1>Gastos</h1>
+    <div class="input-group">
+      <label>Tipo de Gasto</label>
+      <select id="tipoGasto">
+        <option value="">Selecione</option>
+        <option value="luz">Luz</option>
+        <option value="filamento">Filamento</option>
+        <option value="taxa">Taxa</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+    <div id="camposGastos"></div>
+    <div id="gastos-loading" class="loading-message" style="display:none;">Carregando...</div>
+    <div class="tabela-gastos-container" id="tabelaGastos">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Valor</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
   </section>
 
+  <!-- Seção de estoque -->
   <section id="telaEstoque" class="container">
-    <!-- Campos para atualizar estoque -->
-    <input id="materialEstoque" placeholder="Material" type="text">
-    <input id="quantidadeEstoque" placeholder="Quantidade" type="number">
-    <select id="tipoMovimento">
-      <option>Entrada</option>
-      <option>Saída</option>
-    </select>
-    <input id="notaEstoque" placeholder="Nota" type="text">
+    <h1>Estoque</h1>
+    <div class="input-group">
+      <label>Material</label>
+      <select id="materialEstoque">
+        <option value="PLA">PLA</option>
+        <option value="ABS">ABS</option>
+        <option value="PETG">PETG</option>
+        <option value="RESINA">RESINA</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Quantidade</label>
+      <input type="number" id="quantidadeEstoque">
+    </div>
+    <div class="input-group">
+      <label>Tipo de movimento</label>
+      <select id="tipoMovimento">
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Nota</label>
+      <input type="text" id="notaEstoque">
+    </div>
     <button id="btnAtualizarEstoque">Atualizar Estoque</button>
   </section>
 
