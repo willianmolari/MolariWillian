@@ -1,5 +1,4 @@
 // ---------------- CONSTANTES ---------------------
-// ATENÇÃO: Substitua este URL pelo seu Google Apps Script!
 const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxbkJd-cMeVIq3NAkbSHIFL5vB01Y-oC5cZuu0wosYTdE-Ja9DgOuzW8SwxSFdSSiyfXA/exec";
 const PRECO_KWH = 0.82607;
 
@@ -66,6 +65,8 @@ function calcularValores() {
 function atualizarExibicaoValores() {
   const valores = calcularValores();
   const resultado = document.getElementById("resultado");
+  // Limpa o resultado do orçamento personalizado ao recalcular
+  document.getElementById("orcamentoPersonalizado").innerHTML = ""; 
 
   resultado.innerHTML = `
     <p><strong>Custo Filamento/Resina:</strong> ${formatReal(valores.custoFilamento)}</p>
@@ -80,6 +81,7 @@ function atualizarExibicaoValores() {
 }
 
 // ---------------- GASTOS (Funções de Consulta) ---------------------
+// ... (fetchAndDisplayGastos e agruparPorMes permanecem inalteradas) ...
 async function fetchAndDisplayGastos() {
   const loading = document.getElementById('gastos-loading');
   const tabelaBody = document.querySelector("#tabelaGastos tbody");
@@ -129,7 +131,6 @@ async function fetchAndDisplayGastos() {
 
 function agruparPorMes(gastos) {
   return gastos.reduce((grupos, gasto) => {
-    // Usamos o new Date(gasto.data) com timeZone: 'UTC' para evitar problemas de fuso
     const data = new Date(gasto.data); 
     const mesAno = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
@@ -139,7 +140,6 @@ function agruparPorMes(gastos) {
     return grupos;
   }, {});
 }
-
 // ---------------- ORÇAMENTO PERSONALIZADO ---------------------
 function gerarOrcamentoPersonalizado() {
   const produto = document.getElementById("produto").value.trim();
@@ -184,111 +184,81 @@ document.querySelectorAll("button.menu-btn").forEach(botao => {
   });
 });
 
-// Atualizar valores ao digitar/selecionar
+// **AÇÃO PRINCIPAL:** CALCULAR VALORES E EXIBIR NA TELA
 document.querySelectorAll("#telaGestao input, #telaGestao select").forEach(elemento => {
   elemento.addEventListener("input", atualizarExibicaoValores);
 });
-
-// --- Tela de Gestão: Botões de Envio e Cálculo ---
 document.getElementById("btnCalcular").addEventListener("click", atualizarExibicaoValores);
 
+// Ação para o Orçamento Personalizado
 document.getElementById("btnGerarOrcamento").addEventListener("click", gerarOrcamentoPersonalizado);
 
-// Lidar com o envio do formulário (Orçamento Simples)
-document.getElementById("btnEnviar").addEventListener("click", async () => {
-    const produto = document.getElementById("produto").value.trim();
-    const material = document.getElementById("material").value;
-    const quantidade = parseFloat(document.getElementById("quantidade").value);
-    const horas = parseFloat(document.getElementById("horas").value);
-    const maquina = document.getElementById("maquina").value;
-    const pintura = document.getElementById("pintura").value;
-    const dataVenda = document.getElementById("dataVenda").value || new Date().toISOString().split('T')[0];
-
-    if (!produto || !material || isNaN(quantidade) || quantidade <= 0 || isNaN(horas) || horas <= 0 || !maquina || !pintura) {
-      alert("Por favor, preencha todos os campos do orçamento corretamente.");
-      return;
-    }
-
-    const valoresCalculados = calcularValores();
-
-    const dados = {
-      action: "addOrcamento",
-      data: dataVenda, // Usando dataVenda como data do orçamento
-      produto,
-      material,
-      quantidade,
-      horas,
-      maquina,
-      pintura,
-      ...valoresCalculados
-    };
-    
-    alert("Enviando orçamento para a planilha...");
-
-    try {
-      // Requisicao com `mode: 'no-cors'` para funcionar do GitHub Pages
-      const response = await fetch(URL_APPS_SCRIPT, {
-        method: "POST",
-        body: JSON.stringify(dados),
-        mode: 'no-cors' 
-      });
-
-      // O 'no-cors' não permite ler a resposta, então assumimos sucesso
-      alert("Orçamento enviado com sucesso!");
-
-      // Limpar os campos após o envio
-      document.getElementById("produto").value = "";
-      document.getElementById("material").value = "";
-      document.getElementById("quantidade").value = "";
-      document.getElementById("horas").value = "";
-      document.getElementById("maquina").value = "";
-      document.getElementById("pintura").value = "";
-      document.getElementById("orcamentoPersonalizado").innerHTML = ""; // Limpa o orçamento personalizado
-      atualizarExibicaoValores();
-      
-    } catch (error) {
-      console.error("Erro ao enviar orçamento:", error);
-      alert("Erro ao enviar orçamento. Verifique sua conexão ou o console do navegador.");
-    }
+// **BOTÃO ENVIAR ORÇAMENTO (DESATIVADO)**
+// Como você não quer enviar orçamentos ao banco, o código deste botão foi removido.
+// Você pode remover o botão do seu index.html se ele não tiver outra utilidade.
+document.getElementById("btnEnviar").addEventListener("click", () => {
+  alert("O envio de Orçamento Simples foi desativado. Use 'Registrar Venda' para salvar dados.");
 });
 
-// Lidar com o Registro de Venda (Ação similar ao envio de orçamento, mas com flag de venda)
+
+// **AÇÃO ÚNICA DE ENVIO:** REGISTRAR VENDA
 document.getElementById("btnRegistrarVenda").addEventListener("click", async () => {
-    const produto = document.getElementById("produto").value.trim();
-    const material = document.getElementById("material").value;
-    // ... (outras validações omitidas para brevidade, mas são as mesmas do btnEnviar) ...
+    const produto = document.getElementById("produto").value.trim();
+    const material = document.getElementById("material").value;
+    const quantidade = parseFloat(document.getElementById("quantidade").value);
+    const horas = parseFloat(document.getElementById("horas").value);
+    const maquina = document.getElementById("maquina").value;
+    const pintura = document.getElementById("pintura").value;
+    const dataVenda = document.getElementById("dataVenda").value;
 
-    if (!produto || !material || isNaN(parseFloat(document.getElementById("quantidade").value))) {
-      alert("Preencha todos os campos corretamente para registrar a venda.");
-      return;
-    }
+    if (!produto || !material || isNaN(quantidade) || quantidade <= 0 || isNaN(horas) || horas <= 0 || !maquina || !pintura || !dataVenda) {
+      alert("Por favor, preencha todos os campos do orçamento e a Data da Venda corretamente.");
+      return;
+    }
 
-    const valoresCalculados = calcularValores();
-    // Você precisará de um campo para o valor real da venda, por exemplo, o valorRec
-    const valorVenda = valoresCalculados.valorRec; // Exemplo: usando o valor recomendado
+    const valoresCalculados = calcularValores();
+    
+    // Usando o Valor Recomendado como Valor Final da Venda, mas idealmente seria um campo de input.
+    const valorRealVenda = valoresCalculados.valorRec; 
 
-    const dados = {
-      action: "addVenda", // Nova ação para o Apps Script
-      data: document.getElementById("dataVenda").value, 
-      produto,
-      material,
-      valorFinal: valorVenda, // Valor final de venda
-      ...valoresCalculados
-    };
-    
-    alert("Registrando venda...");
+    const dados = {
+      action: "addVenda", // Ação que seu Apps Script deve receber
+      data: dataVenda, 
+      produto,
+      material,
+      quantidade,
+      horas,
+      maquina,
+      pintura,
+      valorFinal: valorRealVenda, 
+      ...valoresCalculados
+    };
+    
+    alert(`Registrando venda no valor de ${formatReal(valorRealVenda)}...`);
 
-    try {
-      const response = await fetch(URL_APPS_SCRIPT, {
-        method: "POST",
-        body: JSON.stringify(dados),
-        mode: 'no-cors' 
-      });
-      alert("Venda registrada com sucesso!");
-    } catch (error) {
-      console.error("Erro ao registrar venda:", error);
-      alert("Erro ao registrar venda.");
-    }
+    try {
+      const response = await fetch(URL_APPS_SCRIPT, {
+        method: "POST",
+        body: JSON.stringify(dados),
+        mode: 'no-cors' 
+      });
+
+      alert("Venda registrada com sucesso!");
+      
+      // Limpar os campos após o sucesso
+      document.getElementById("produto").value = "";
+      document.getElementById("material").value = "";
+      document.getElementById("quantidade").value = "";
+      document.getElementById("horas").value = "";
+      document.getElementById("maquina").value = "";
+      document.getElementById("pintura").value = "";
+      document.getElementById("orcamentoPersonalizado").innerHTML = "";
+      atualizarExibicaoValores();
+
+    } catch (error) {
+      console.error("Erro ao registrar venda:", error);
+      alert("Erro ao registrar venda. Verifique sua conexão ou o console do navegador.");
+    }
 });
 
 
@@ -369,7 +339,6 @@ document.getElementById("btnSalvarGasto").addEventListener("click", async () => 
 
         if (response.ok) {
             alert("Gasto salvo com sucesso!");
-            // Recarregar a lista de gastos
             fetchAndDisplayGastos(); 
         } else {
             alert("Erro ao salvar gasto.");
@@ -401,7 +370,7 @@ document.querySelector("#tabelaGastos tbody").addEventListener("click", async (e
 
             if (response.ok) {
                 alert("Gasto excluído com sucesso!");
-                fetchAndDisplayGastos(); // Recarrega a tabela
+                fetchAndDisplayGastos(); 
             } else {
                 alert("Erro ao excluir gasto.");
             }
@@ -450,7 +419,7 @@ document.getElementById("btnAtualizarEstoque").addEventListener("click", async (
 
 // ---------------- INICIALIZAÇÃO ---------------------
 window.addEventListener("load", () => {
-  actualizarExibicaoValores();
+  atualizarExibicaoValores();
   
   // Define a data de venda padrão para hoje
   document.getElementById('dataVenda').value = new Date().toISOString().split('T')[0];
